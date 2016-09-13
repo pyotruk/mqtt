@@ -3,6 +3,7 @@
 
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
+#include <DHT.h>
 
 const char *ssid = "GT-9195"; // Имя вайфай точки доступа
 const char *pass = "asdfghjk"; // Пароль от точки доступа
@@ -34,6 +35,9 @@ void callback(char* topic, uint8_t* payload, unsigned int length) {
 
 WiFiClient wclient; 
 PubSubClient client(mqtt_server, mqtt_port, wclient);
+DHT dht(2, DHT22, 15);
+
+int cnt = 0;
 
 void setup() {
   Serial.begin(9600);
@@ -41,6 +45,7 @@ void setup() {
   Serial.println("WAIT >> Setup begin...");
   Serial.println();
   pinMode(DEVICE, OUTPUT);
+  dht.begin();
   Serial.println("OK >> Setup completed!");
 }
 
@@ -82,8 +87,27 @@ void loop() {
     }
   }
 
+  if (client.connected() && ((++cnt % 1000) == 0)) {
+    
+    float temperature = dht.readTemperature();
+    float humidity = dht.readHumidity();
+
+    String msg = "T=";
+    msg += temperature;
+    msg += ", H=";
+    msg += humidity;
+
+    if (client.publish(mqtt_topic, (char*)&msg)) {
+      Serial.println("OK >> published.");
+      
+    } else {
+      Serial.println("ERR >> publish failed.");
+    }    
+  }
+
   if (client.connected()) {
     client.loop();
   }
+
 }
 
