@@ -1,4 +1,4 @@
-#include <MqttConnector.h>
+#include "MqttConnector.h"
 
 MqttConnector::MqttConnector(
       char* wifi_ssid, 
@@ -21,7 +21,7 @@ MqttConnector::MqttConnector(
   mqtt_client = &PubSubClient(mqtt_server, mqtt_port, wifi_client);
 }
 
-boolean MqttConnector::connect(MQTT_CALLBACK_SIGNATURE, std::vector *topics) {
+boolean MqttConnector::connect(MQTT_CALLBACK_SIGNATURE, std::vector<String> *topics) {
   return connectWiFi() && connectMqtt(callback, topics);
 }
 
@@ -32,13 +32,13 @@ boolean MqttConnector::connectWiFi() {
   return WiFi.waitForConnectResult() == WL_CONNECTED;
 }
 
-boolean MqttConnector::connectMqtt(MQTT_CALLBACK_SIGNATURE, std::vector *topics) {
+boolean MqttConnector::connectMqtt(MQTT_CALLBACK_SIGNATURE, std::vector<String> *topics) {
   if (mqtt_client.connected()) return true;
   if (!mqtt_client.connect(mqtt_client_name, mqtt_user, mqtt_pass)) return false;
     
   client.setCallback(callback);
 
-  for (std::vector<T>::iterator it = topics->begin(); it != topics->end(); ++it) {
+  for (std::vector<String>::iterator it = topics->begin(); it != topics->end(); ++it) {
       client.subscribe(*it);
   }  
   return true;

@@ -1,9 +1,6 @@
-// Принимаем данные от MQTT-сервера
-// и управляем (вкл/выкл) устройством на порте DEVICE
-
-#include <TempSensor.h>
-#include <Heater.h>
-#include <MqttConnector.h>
+#include "TempSensor.h"
+#include "Heater.h"
+#include "MqttConnector.h"
 
 const char *WIFI_SSID = "GT-9195"; // Имя вайфай точки доступа
 const char *WIFI_PASSWORD = "asdfghjk"; // Пароль от точки доступа

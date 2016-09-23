@@ -1,4 +1,7 @@
-#include <std>
+#ifndef MqttConnector_h
+#define MqttConnector_h
+
+#include <StandardCplusplus.h>
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
 
@@ -29,8 +32,10 @@ class MqttConnector {
       char* mqtt_pass,
       char* mqtt_client_name
     );
-    boolean connect(MQTT_CALLBACK_SIGNATURE, std::vector *topics);
+    boolean connect(MQTT_CALLBACK_SIGNATURE, std::vector<String> *topics);
     char* getConnectionError();
     boolean publish(const char* topic, const char* payload);
     void loop();
 };
+
+#endif

@@ -1,3 +1,4 @@
+#include <Arduino.h>
 
 class Heater {
 
@@ -7,5 +8,5 @@ class Heater {
   public:
     Heater(int pin);
     void setup();
-    boolean processCommand(const char* cmd);
+    bool processCommand(const char* cmd);
 };
